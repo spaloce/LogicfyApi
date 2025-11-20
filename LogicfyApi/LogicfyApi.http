@@ -1,0 +1,6 @@
+@LogicfyApi_HostAddress = http://localhost:5285
+
+GET {{LogicfyApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
