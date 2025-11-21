@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { adminService } from '../../services/adminService';
+import DockMenu from '../DockMenu/DockMenu';
 import './AdminDashboard.css';
 
 const AdminDashboard = ({ user, onLogout }) => {
     const [dashboardData, setDashboardData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         loadDashboardData();
@@ -23,6 +27,34 @@ const AdminDashboard = ({ user, onLogout }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleMenuSelect = (menuId) => {
+        const routes = {
+            dashboard: '/dashboard',
+            languages: '/languages',
+            sections: '/sections',
+            units: '/units',
+            lessons: '/lessons',
+            questions: '/questions',
+            users: '/users'
+        };
+
+        if (routes[menuId]) {
+            navigate(routes[menuId]);
+        }
+    };
+
+    const getActiveSection = () => {
+        const path = location.pathname;
+        if (path === '/dashboard' || path === '/') return 'dashboard';
+        if (path === '/languages') return 'languages';
+        if (path === '/sections') return 'sections';
+        if (path === '/units') return 'units';
+        if (path === '/lessons') return 'lessons';
+        if (path === '/questions') return 'questions';
+        if (path === '/users') return 'users';
+        return 'dashboard';
     };
 
     const formatNumber = (num) => {
@@ -89,6 +121,15 @@ const AdminDashboard = ({ user, onLogout }) => {
                 <nav className="admin-nav">
                     <div className="admin-brand">
                         <div className="admin-logo">Logicfy Admin</div>
+                        <div className="active-section">
+                            {getActiveSection() === 'dashboard' && '📊 Dashboard'}
+                            {getActiveSection() === 'languages' && '💻 Programlama Dilleri'}
+                            {getActiveSection() === 'sections' && '📚 Kısımlar'}
+                            {getActiveSection() === 'units' && '📂 Üniteler'}
+                            {getActiveSection() === 'lessons' && '📖 Dersler'}
+                            {getActiveSection() === 'questions' && '❓ Sorular'}
+                            {getActiveSection() === 'users' && '👥 Kullanıcı İstatistikleri'}
+                        </div>
                     </div>
                     <div className="admin-user">
                         <span>Hoş geldiniz, {user?.adSoyad || 'Admin'}</span>
@@ -262,6 +303,9 @@ const AdminDashboard = ({ user, onLogout }) => {
                     </div>
                 </div>
             </main>
+
+            {/* Dock Menu */}
+            <DockMenu onMenuSelect={handleMenuSelect} activeMenu={getActiveSection()} />
         </div>
     );
 };

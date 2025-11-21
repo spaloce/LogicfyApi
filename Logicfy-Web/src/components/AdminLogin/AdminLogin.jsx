@@ -17,7 +17,6 @@ const AdminLogin = ({ onLoginSuccess }) => {
             ...prev,
             [name]: value
         }));
-        // Hata mesajını temizle
         if (error) setError('');
     };
 
@@ -35,27 +34,23 @@ const AdminLogin = ({ onLoginSuccess }) => {
         }
 
         try {
+            console.log('Login attempt with:', formData.email);
             const result = await authService.login(formData.email, formData.password);
 
             if (result.success) {
                 setSuccess('Giriş başarılı! Yönlendiriliyorsunuz...');
+                console.log('Login successful:', result);
 
                 // Kullanıcı bilgilerini al
-                setTimeout(async () => {
-                    try {
-                        const userData = await authService.getMe();
-                        onLoginSuccess(userData);
-                    } catch (userError) {
-                        console.error('Kullanıcı bilgileri alınamadı:', userError);
-                        onLoginSuccess(result);
-                    }
+                setTimeout(() => {
+                    onLoginSuccess(result);
                 }, 1500);
             } else {
                 setError(result.message || 'Giriş başarısız');
             }
         } catch (err) {
+            console.error('Login error details:', err);
             setError(err.message || 'Bir hata oluştu. Lütfen tekrar deneyin.');
-            console.error('Login error:', err);
         } finally {
             setLoading(false);
         }

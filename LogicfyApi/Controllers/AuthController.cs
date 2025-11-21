@@ -1,5 +1,6 @@
 ﻿using LogicfyApi.Requests;
 using LogicfyApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,13 @@ namespace LogicfyApi.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _acc;
 
-        public AuthController(IAuthService authService, IConfiguration configuration)
+        public AuthController(IAuthService authService, IConfiguration configuration,IHttpContextAccessor acc)
         {
             _authService = authService;
             _configuration = configuration;
+            _acc=acc;
         }
 
         [HttpPost("register")]
@@ -53,8 +56,19 @@ namespace LogicfyApi.Controllers
             {
                 return BadRequest(result);
             }
+            // JWT'yi HttpOnly Cookie olarak yaz
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,                // https://localhost için de sorun yok
+                SameSite = SameSiteMode.None, // cross-origin istek için şart
+                Expires = DateTime.UtcNow.AddHours(12),
+                Domain = null                 // localhost testi için DOMAIN YOK
+            };
 
-            SetTokenCookie(result.Token);
+            _acc.HttpContext!.Response.Cookies.Append("logicfy_token", result.Token, cookieOptions);
+
+
             return Ok(result);
         }
 
@@ -73,12 +87,17 @@ namespace LogicfyApi.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetMe()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // Sadece test için:
+            // var debugClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (string.IsNullOrEmpty(userId))
             {
+                // Buraya düşüyorsak → token doğrulanmamıştır
                 return Unauthorized(new { message = "Token geçersiz" });
             }
 
@@ -91,13 +110,20 @@ namespace LogicfyApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("me-debug")]
+        public IActionResult DebugMe()
+        {
+            var cookies = Request.Cookies;
+            return Ok(cookies);
+        }
+
         private void SetTokenCookie(string token)
         {
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
                 Expires = DateTimeOffset.UtcNow.AddMinutes(int.Parse(_configuration["JwtSettings:ExpirationMinutes"]))
             };
 

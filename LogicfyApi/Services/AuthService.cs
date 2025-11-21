@@ -1,6 +1,7 @@
 ﻿using LogicfyApi.Data;
 using LogicfyApi.DTOs;
 using LogicfyApi.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,15 +14,19 @@ namespace LogicfyApi.Services
     {
         private readonly UserManager<Kullanici> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<Kullanici> _signManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IConfiguration _configuration;
         private readonly AppDbContext _context;
 
-        public AuthService(UserManager<Kullanici> userManager, IConfiguration configuration, AppDbContext context, RoleManager<IdentityRole> roleManager)
+        public AuthService(UserManager<Kullanici> userManager, IHttpContextAccessor acc, IConfiguration configuration, AppDbContext context, RoleManager<IdentityRole> roleManager, SignInManager<Kullanici> signManager)
         {
             _userManager = userManager;
             _configuration = configuration;
             _context = context;
             _roleManager = roleManager;
+            _signManager = signManager;
+            _httpContextAccessor = acc;
         }
 
         public async Task<AuthResponse> RegisterAsync(string email, string adSoyad, string password)
@@ -109,19 +114,42 @@ namespace LogicfyApi.Services
                 };
             }
 
+            // Login başarılı
             user.SonGirisTarihi = DateTime.Now;
             await _userManager.UpdateAsync(user);
 
+            // JWT oluştur
             var token = GenerateJwtToken(user);
+
+          
+
             return new AuthResponse
             {
                 Success = true,
                 Message = "Giriş başarılı",
                 User = MapToUserDto(user),
-                Token = token
+                Token = token // istersen React'ta okumazsın, cookie yeterli
             };
         }
 
+        private async Task<ClaimsPrincipal> CreateUserPrincipalAsync(Kullanici user)
+        {
+            // Identity'nin varsayılan claimleri
+            var principal = await _signManager.CreateUserPrincipalAsync(user);
+            var identity = (ClaimsIdentity)principal.Identity!;
+
+            // Kullanıcı rolleri
+            var roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+
+            // Ekstra custom claim eklemek istersen:
+            identity.AddClaim(new Claim("UserId", user.Id));
+            identity.AddClaim(new Claim("DisplayName", $"{user.AdSoyad}"));
+            return principal;
+        }
         public async Task<AuthResponse> GetMeAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);

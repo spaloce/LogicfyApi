@@ -335,3 +335,152 @@
         transform: rotate(360deg);
     }
 }
+
+/* AdminDashboard.css'ye ekle */
+.active-section {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.section-placeholder {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    margin: 2rem 0;
+}
+
+.section-placeholder h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.section-placeholder p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Dock menu için padding ayarı */
+.admin-main {
+    padding-bottom: 120px;
+    /* Dock menu için alt boşluk */
+}
+
+/* Placeholder icon */
+.placeholder-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.back-to-dashboard-btn {
+    background: linear-gradient(135deg, #4e1260, #05deeb);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+.back-to-dashboard-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(78, 18, 96, 0.3);
+}
+
+/* Active section indicator in header */
+.active-section {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Section placeholder styles */
+.section-placeholder {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    margin: 2rem 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.placeholder-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.section-placeholder h2 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.section-placeholder p {
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.back-to-dashboard-btn {
+    background: linear-gradient(135deg, #4e1260, #05deeb);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.back-to-dashboard-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(78, 18, 96, 0.3);
+}
+
+/* Dock menu için alt boşluk */
+.admin-main {
+    padding-bottom: 120px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .active-section {
+        font-size: 1rem;
+        margin-left: 0.5rem;
+        padding-left: 0.5rem;
+    }
+
+    .section-placeholder {
+        padding: 3rem 1rem;
+        margin: 1rem;
+    }
+
+    .placeholder-icon {
+        font-size: 3rem;
+    }
+
+    .section-placeholder h2 {
+        font-size: 1.5rem;
+    }
+
+    .admin-main {
+        padding-bottom: 140px;
+    }
+}
