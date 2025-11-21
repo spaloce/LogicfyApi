@@ -25,6 +25,7 @@ namespace LogicfyApi.Data
         public DbSet<Ders> Dersler { get; set; }
         public DbSet<Unite> Uniteler { get; set; }
         public DbSet<Kisim> Kisimlar { get; set; }
+        public DbSet<KisimIcerik> KisimIcerikler { get; set; }
         public DbSet<Soru> Sorular { get; set; }
         public DbSet<SoruSecenek> SoruSecenekleri { get; set; }
         public DbSet<SoruKelimeBlok> SoruKelimeBloklar { get; set; }
@@ -38,6 +39,24 @@ namespace LogicfyApi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<KisimIcerik>()
+        .HasOne(i => i.ProgramlamaDili)
+        .WithMany()
+        .HasForeignKey(i => i.ProgramlamaDiliId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<KisimIcerik>()
+                .HasOne(i => i.Unite)
+                .WithMany()
+                .HasForeignKey(i => i.UniteId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<KisimIcerik>()
+                .HasOne(i => i.Kisim)
+                .WithMany()
+                .HasForeignKey(i => i.KisimId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Kullanici - KullaniciDersKaydi (1:N)
             modelBuilder.Entity<KullaniciDersKaydi>()

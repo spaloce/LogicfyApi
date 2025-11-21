@@ -10,6 +10,7 @@ import Questions from './components/Questions/Questions';
 import UserStats from './components/UserStats/UserStats';
 import { authService } from './services/authService';
 import './App.css';
+import SectionContents from './components/SectionContents/SectionContents';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -73,6 +74,7 @@ function App() {
             <Route path="/sections" element={<Sections user={user} onLogout={handleLogout} />} />
             <Route path="/units" element={<Units user={user} onLogout={handleLogout} />} />
             <Route path="/lessons" element={<Lessons user={user} onLogout={handleLogout} />} />
+            <Route path="/sectioncontents" element={<SectionContents user={user} onLogout={handleLogout} />} />
             <Route path="/questions" element={<Questions user={user} onLogout={handleLogout} />} />
             <Route path="/users" element={<UserStats user={user} onLogout={handleLogout} />} />
             <Route path="/stats/:userId" element={<UserStats user={user} onLogout={handleLogout} />} />

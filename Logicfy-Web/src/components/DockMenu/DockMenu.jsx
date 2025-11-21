@@ -36,6 +36,12 @@ const DockMenu = ({ onMenuSelect, activeMenu }) => {
             description: 'Ders yönetimi'
         },
         {
+            id: 'sectioncontents',
+            icon: '📖',
+            label: 'Ders İçerikleri',
+            description: 'Ders Öğrenim İçerikleri'
+        },
+        {
             id: 'questions',
             icon: '❓',
             label: 'Sorular',
@@ -47,6 +53,7 @@ const DockMenu = ({ onMenuSelect, activeMenu }) => {
             label: 'Kullanıcı İstatistikleri',
             description: 'Kullanıcı analizleri'
         }
+
     ];
 
     const handleMouseEnter = (menuId) => {

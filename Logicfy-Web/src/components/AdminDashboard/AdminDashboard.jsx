@@ -37,7 +37,8 @@ const AdminDashboard = ({ user, onLogout }) => {
             units: '/units',
             lessons: '/lessons',
             questions: '/questions',
-            users: '/users'
+            users: '/users',
+            sectioncontents: '/sectioncontents'
         };
 
         if (routes[menuId]) {

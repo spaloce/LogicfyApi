@@ -143,7 +143,8 @@ const UserStats = ({ user, onLogout }) => {
             lessons: '/lessons',
             questions: '/questions',
             users: '/users',
-            stats: '/stats'
+            stats: '/stats',
+            sectioncontents: '/sectioncontents'
         };
         if (routes[menuId]) {
             navigate(routes[menuId]);

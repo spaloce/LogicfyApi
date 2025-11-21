@@ -166,6 +166,11 @@
     text-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
 }
 
+.dock-item:nth-child(8):hover .dock-icon,
+.dock-item:nth-child(8).hovered .dock-icon {
+    text-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+}
+
 /* Active state specific styles */
 .dock-item.active:nth-child(1) {
     border: 1px solid rgba(78, 18, 96, 0.3);
@@ -192,6 +197,10 @@
 }
 
 .dock-item.active:nth-child(7) {
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.dock-item.active:nth-child(8) {
     border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
@@ -354,5 +363,9 @@
 }
 
 .dock-item.active:nth-child(7)::before {
+    background: linear-gradient(135deg, #3b82f6, #9333ea);
+}
+
+.dock-item.active:nth-child(8)::before {
     background: linear-gradient(135deg, #3b82f6, #9333ea);
 }
